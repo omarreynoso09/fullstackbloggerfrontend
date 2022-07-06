@@ -1,8 +1,10 @@
-const BlogsPage = ({ message }) => {
+import React from "react";
+
+const BlogsPage = (props) => {
   return (
     <div className="blogs-page">
       <h1>Blogs Page</h1>
-      <p>Server Message: {message}</p>
+      <p>Server Message: {props.message}</p>
     </div>
   );
 };
