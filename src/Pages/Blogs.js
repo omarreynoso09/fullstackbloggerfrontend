@@ -1,4 +1,5 @@
 import React from "react";
+import "../App.css";
 
 const BlogsPage = ({
   blogs,
@@ -101,17 +102,31 @@ const BlogsPage = ({
 const BlogPost = ({ blog }) => {
   return (
     <div className="blogPost">
-      <h2>Title: {blog.title}</h2>
+      <hr></hr>
+      <h3>
+        Title: <span>{blog.title}</span>
+      </h3>
       <br />
-      <h3>Author: {blog.author}</h3>
+      <h3>
+        Author: <span>{blog.author}</span>
+      </h3>
       <br />
-      <h4>Category: {blog.category}</h4>
+      <h3>
+        Category: <span>{blog.category}</span>
+      </h3>
       <br />
-      <div>{blog.text}</div>
+      <p>
+        <span>{blog.text}</span>
+      </p>
       <br />
-      <div>Created At: {blog.createdAt}</div>
+      <h3>
+        Created At: <span>{blog.createdAt}</span>
+      </h3>
       <br />
-      <div>Last Modified: {blog.lastModified}</div>
+      <h3>
+        Last Modified: <span>{blog.lastModified}</span>
+      </h3>
+      <hr></hr>
     </div>
   );
 };

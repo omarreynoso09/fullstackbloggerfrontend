@@ -23,7 +23,50 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+.blogPost {
+  background-color: rgb(174, 217, 176);
+}
+h1 {
+  font-size: 4rem;
+  font-weight: bolder;
+}
+h3 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: green;
+  margin: 0;
+  padding: 0;
+}
+p {
+  font-size: 1.1rem;
+  font-family: monospace;
+}
+span {
+  color: black;
+}
+label {
+  font-size: 1.2rem;
+  margin-right: 10px;
+  margin-left: 5px;
+  font-weight: bolder;
+  color: green;
+}
+select {
+  width: 100px;
+  height: 20px;
+  margin: 5px;
+  color: green;
+}
+input {
+  height: 30px;
+  width: 100px;
+  border-radius: 10px;
+  background-color: rgba(52, 140, 52, 0.604);
+  font-size: 1rem;
+}
+hr {
+  margin: 20px;
+}
 .App-link {
   color: #61dafb;
 }
