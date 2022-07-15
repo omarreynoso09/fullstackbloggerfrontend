@@ -3,28 +3,23 @@ import { Routes, Route } from "react-router-dom";
 import BlogsPage from "./Pages/Blogs";
 import { useState, useEffect } from "react";
 import PostBlogPage from "./Pages/PostBlogPage";
-import BlogManager from "./Pages/BlogManager";
+import BlogManager from "./Pages/BlogsManager";
 
 const urlEndpoint = "http://localhost:4000";
 
-//list of variables to sort and filter the blog data
-//do not use empty () instead add "" strings
-// for limit and page dont forget the Numberconstructor
-
-const App = () => {
+function App() {
   const [serverJSON, setServerJSON] = useState({ message: [] });
   const [sortField, setSortField] = useState("id");
   const [sortOrder, setSortOrder] = useState("DESC");
   const [filterField, setFilterField] = useState("title");
   const [filterValue, setFilterValue] = useState("");
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
   const [adminBlogList, setAdminBlogList] = useState({ message: [] });
   const [adminBlogsLoading, setAdminBlogsLoading] = useState(false);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
 
   const blogSubmit = async (blog) => {
-    setIsFetching(true);
     const url = `${urlEndpoint}/blogs/blog-submit`;
     const response = await fetch(url, {
       method: "POST",
@@ -33,8 +28,8 @@ const App = () => {
       },
       body: JSON.stringify(blog),
     });
+
     const responseJSON = await response.json();
-    setIsFetching(false);
     return responseJSON;
   };
 
@@ -44,30 +39,41 @@ const App = () => {
     const response = await fetch(url, {
       method: "DELETE",
     });
-    const responseJSON = await response.json();
     setAdminBlogsLoading(false);
+    const responseJSON = await response.json();
+    return responseJSON;
   };
 
-  useEffect(() => {
-    const fetchAdminBlogList = async () => {
-      const apiResponse = await fetch(`${urlEndpoint}/admin/blog-list`);
-      const json = await apiResponse.json();
-      setAdminBlogList(json);
-      return;
-    };
-    fetchAdminBlogList();
-  }, [adminBlogsLoading]);
+  const fetchSingleBlog = async (blogId) => {
+    const url = `${urlEndpoint}/blogs/single-blog/${blogId}`;
+    const response = await fetch(url);
+    const responseJSON = await response.json();
+    return responseJSON.message;
+  };
 
+  // code to copy and add in
   useEffect(() => {
     const fetchData = async () => {
       const url = `${urlEndpoint}/blogs/all-blogs?sortField=${sortField}&sortOrder=${sortOrder}&filterField=${filterField}&filterValue=${filterValue}&limit=${limit}&page=${page}`;
       const apiResponse = await fetch(url);
       const apiJSON = await apiResponse.json();
       setServerJSON(apiJSON);
+      console.log("url", url);
       return;
     };
     fetchData();
   }, [sortField, sortOrder, filterField, filterValue, limit, page, isFetching]);
+
+  useEffect(() => {
+    const fetchAdminBlogList = async () => {
+      const apiResponse = await fetch(`${urlEndpoint}/admin/blog-list`);
+      const json = await apiResponse.json();
+      setAdminBlogList(json);
+      return json;
+    };
+    fetchAdminBlogList();
+  }, [adminBlogsLoading]);
+
   return (
     <div className="App">
       <Routes>
@@ -93,20 +99,27 @@ const App = () => {
         ></Route>
         <Route
           path="/post-blog"
-          element={<PostBlogPage blogSubmit={blogSubmit} />}
-        />
+          element={
+            <PostBlogPage
+              blogSubmit={blogSubmit}
+              setIsFetching={setIsFetching}
+            />
+          }
+        ></Route>
         <Route
           path="/blog-manager"
           element={
             <BlogManager
               adminBlogList={adminBlogList.message}
               deleteBlog={deleteBlog}
+              fetchSingleBlog={fetchSingleBlog}
+              urlEndpoint={urlEndpoint}
+              setAdminBlogsLoading={setAdminBlogsLoading}
             />
           }
         />
       </Routes>
     </div>
   );
-};
-
+}
 export default App;
